@@ -1,0 +1,1 @@
+plasticity_mechanics_labels = ["Elastoplasticity Mechanics"]
