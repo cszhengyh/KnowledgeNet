@@ -1,7 +1,7 @@
 import requests
 from openai import OpenAI
 
-OPENAI_API_KEY = "sk-proj-gHij2pGQqLkYZs7BnDwST3BlbkFJyfZoz9PSLqiED4AugPxz"
+OPENAI_API_KEY = ""
 client = OpenAI(api_key=OPENAI_API_KEY)
 model = 'gpt-4o-2024-08-06'
 headers = {
