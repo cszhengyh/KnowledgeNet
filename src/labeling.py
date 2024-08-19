@@ -1,9 +1,3 @@
-# python /share/project/zhengyuhui/domain_tree_3.1.1/labeling.py > /share/project/zhengyuhui/domain_tree_3.1.1/log/labeling.log
-# SAMPLE_SFT_DATA_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/sample_sft_data.jsonl"
-
-# python /share/project/zhengyuhui/domain_tree_3.1.1/labeling.py > /share/project/zhengyuhui/domain_tree_3.1.1/log/benchmark_labeling.log
-SAMPLE_SFT_DATA_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/benchmark_instructions/bad_case_instruction/GPQA_diamond.instructions"
-
 import os
 import re
 import openai
@@ -17,44 +11,10 @@ from domain_tree.layers.layer_2 import *
 from domain_tree.layers.layer_3 import *
 import matplotlib.pyplot as plt
 
-messages = []
-openai.api_key = "EMPTY"
-openai.base_url = "http://127.0.0.1:7999/v1/"
-model = "Llama3_1-70B-6M-math-0729-megatron"
-
 label_to_instructions = defaultdict(lambda: [])
 sft_data_instructions = []
 instructions_file = ['lukaemon_mmlu']
 expand_instructions = []
-
-# with jsonlines.open(SAMPLE_SFT_DATA_PATH, 'r') as sft_data:
-#     for line in sft_data:
-#         sft_data_conversations = line['conversations']
-#         temp = ""
-#         for sft_data_conversation in sft_data_conversations:
-#             temp += sft_data_conversation['value']
-#         sft_data_instructions.append(temp)
-#         # print(sft_data_conversation['value'])
-
-# BAD_INSTRUCTIONS_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/benchmark_instructions/bad_case_instruction/processed_data"
-# # for name in instructions_file:
-# for f in os.listdir(BAD_INSTRUCTIONS_PATH):
-#     # if f[:f.find('.')][:len(name)] == name:
-#     with open(os.path.join(BAD_INSTRUCTIONS_PATH, f), 'r', encoding='utf-8') as sft_data:
-#         for line in sft_data:
-#             sft_data_instructions.append(line)
-
-BAD_INSTRUCTIONS_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/benchmark_instructions/bad_case_instruction"
-for name in instructions_file:
-    for f in os.listdir(BAD_INSTRUCTIONS_PATH):
-        if f[:f.find('.')][:len(name)] == name:
-            with open(os.path.join(BAD_INSTRUCTIONS_PATH, f), 'r', encoding='utf-8') as sft_data:
-                for line in sft_data:
-                    sft_data_instructions.append(line)
-
-# with open(SAMPLE_SFT_DATA_PATH, 'r', encoding='utf-8') as sft_data:
-#     for line in sft_data:
-#         sft_data_instructions.append(line)
 
 # test_instruction = """Question: Which event most likely allowed for the explosion of mammal diversity that occurred during the Cretaceous period?\nA. formation of the supercontinent Pangea\nB. intense volcanic activity\nC. cooler temperatures\nD. rising sea levels\nAnswer:C"""
 # sft_data_instructions.append(test_instruction)
@@ -105,17 +65,7 @@ def labeling(sft_data_instructions):
                     break
                 try:
                     # gpt4o
-                    # targets = chat_with_gpt(messages)
-
-                    # llama3 70B
-                    response = openai.chat.completions.create(
-                            model=model,
-                            messages=messages,
-                            temperature=0.7,
-                            top_p=0.95,
-                            stop="ation:"
-                            )        
-                    targets = response.choices[0].message.content
+                    targets = chat_with_gpt(messages)
                     
                     if re.findall(r"\[labels:\s*(.*?),\s*Explan", targets):
                         targets = re.findall(r"\[labels:\s*(.*?),\s*Explan", targets)[0]
@@ -181,9 +131,10 @@ def labeling(sft_data_instructions):
     Y = []
     for key, value in sort_label_to_instructions.items():
         Y.append(len(value))
-        print(f"\n===============================\nlabel: {key}, label_path_len: {[len(item) for item in label_path[key]]}, label_path: {label_path[key]}, count: {len(value)}\n[")
+        print(f"\n===============================\nlabel: {key}, label_path_len: {[len(item) for item in label_path[key]]}, label_path: {label_path[key]}, count: {len(value)}\n[",end='')
         for instruction in value:
-            print(instruction)
+            print(repr(instruction), end='')
+        print(']')
     
     print("\n===========================expand instructions===========================\n")
     print(f"Expand instructions number is {len(expand_instructions)}.")

@@ -1,11 +1,3 @@
-# rm -rf /share/project/zhengyuhui/domain_tree_3.1.1/log/extract_bad_case_instructions_log/* && python /share/project/zhengyuhui/domain_tree_3.1.1/extract_instructions/extract_benchmark_bad_case_instructions.py
-INSTRUCTIONS_DIRNAME = "/share/project/mdzhao/evaluation/opencompass/outputs/default/Mistral-7B-OBJ-V2_617/predictions/Mistral-7B-OBJ-V2"
-BAD_CASE_INSTRUCTIONS_DIRNAME = "/share/project/zhengyuhui/domain_tree_3.1.1/benchmark_instructions/bad_case_instruction"
-LOG_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/log/extract_bad_case_instructions_log"
-
-HUMAN_EVAL_RESULT_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/human-eval/humaneval_samples.jsonl_results.jsonl"
-HUMAN_EVAL_DATA_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/human-eval/data/HumanEval.jsonl"
-
 import os
 import re
 import sys

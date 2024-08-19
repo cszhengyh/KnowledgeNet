@@ -1,39 +1,12 @@
-# python /share/project/zhengyuhui/domain_tree_3.1.1/build_domain_tree.py > /share/project/zhengyuhui/domain_tree_3.1.1/log/build_domain_tree.log
-LAYERS_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/domain_tree/new_layers"
-ZH_DISCIPLINE_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/domain_tree/academic_discipline/process_academic_discipline_zh.txt"
-NEW_ZH_DISCIPLINE_PATH = "/share/project/zhengyuhui/domain_tree_3.1.1/domain_tree/academic_discipline/new_academic_discipline_zh.txt"
-
 import re
 import openai
 from collections import defaultdict
 from chat_with_gpt import chat_with_gpt
 from prompts.translate_prompt import translate_prompt
 
-messages = []
-openai.api_key = "EMPTY"
-openai.base_url = "http://127.0.0.1:7999/v1/"
-model = "Llama3-70B-6M-0718-megatron"
-MAX_INPUT_LEN = 2048
-
 def translate(zh_discipline):
     # return zh_discipline
     query = translate_prompt + f"Now, the Chinese expression of the academic discipline is \"{zh_discipline}\", please respond in accordance with the above requirements."
-
-    # Llama3-70B
-    # messages = [{"role":"user","content": " ".join(query.split(" ")[:MAX_INPUT_LEN])+'"'}]
-    # while True:
-    #     response = openai.chat.completions.create(
-    #             model=model,
-    #             messages=messages,
-    #             temperature=0.7,
-    #             top_p=0.95,
-    #             )        
-    #     response = response.choices[0].message.content    
-    #     if re.findall(r'\[translation:\s*(.*?)\]', response):
-    #         translation = re.findall(r'\[translation:\s*(.*?)\]', response)[0]
-    #         break
-    #     else:
-    #         continue
 
     # gpt4o
     while True:
